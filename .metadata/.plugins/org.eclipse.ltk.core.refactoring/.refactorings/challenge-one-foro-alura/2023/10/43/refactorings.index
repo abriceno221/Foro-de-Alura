@@ -1,0 +1,21 @@
+1698201030348	Rename resource 'V6__create-table-respuestas.sql'
+1698201040432	Rename resource 'V7__create-table-respuestas.sql'
+1698201056498	Rename resource 'V5__alter-table-topicos-add-cursosid-and-usuarioid.sql'
+1698201100217	Copy file
+1698201154030	Rename resource 'V5__alter-table-topicos-add-cursosid.sql'
+1698201326523	Rename resource 'V7__alter-table-respuestas-add-topicoid-and-usuarioid.sql'
+1698201336246	Rename resource 'V8__create-table-respuestas.sql'
+1698202042387	Delete element
+1698203192268	Copy compilation unit
+1698203205330	Delete element
+1698203231549	Move compilation unit
+1698203273079	Move compilation unit
+1698203282678	Move compilation unit
+1698203287777	Delete element
+1698211815795	Rename field 'autor'
+1698214050340	Delete element
+1698214079923	Copy file
+1698214182183	Rename resource 'V1__create-table-topicos.sql'
+1698214242609	Rename resource 'V1__create-table-topicos1.sql'
+1698281231214	Rename field 'nombre'
+1698281438954	Rename field 'contrasena'

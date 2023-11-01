@@ -1,0 +1,5 @@
+package com.alura.foro.domain.usuario;
+
+public interface UsuarioRepository {
+
+}

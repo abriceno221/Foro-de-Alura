@@ -1,0 +1,15 @@
+package com.alura.foro.domain.curso;
+
+import jakarta.validation.constraints.NotBlank;
+
+public record DatosRegistrarCurso(
+		@NotBlank
+		String nombre,
+		@NotBlank
+		String categoria
+		) {
+	
+	public DatosRegistrarCurso(Curso curso) {
+		this(curso.getNombre(), curso.getCategoria());
+	}
+}

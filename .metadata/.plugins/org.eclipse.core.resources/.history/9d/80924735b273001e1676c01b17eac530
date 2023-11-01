@@ -1,0 +1,86 @@
+package com.alura.foro.domain.topico;
+
+import java.net.URI;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+import org.springframework.web.util.UriComponentsBuilder;
+
+import com.alura.foro.domain.curso.CursoRepository;
+import com.alura.foro.domain.usuario.UsuarioRepository;
+import com.alura.foro.infra.errores.ValidacionDeIntegridad;
+
+
+@Service
+public class RegistroDeTopicoService {
+	
+	@Autowired
+	TopicoRepository topicoRepository;
+	
+	@Autowired
+	CursoRepository cursoRepository;
+	
+	@Autowired
+	UsuarioRepository usuarioRepository;
+
+	public ResponseEntity<DatosDetalleTopico> registrarTopico(DatosRegistrarTopico datos,  UriComponentsBuilder uriComponentsBuilder) {
+		
+		if(usuarioRepository.existsById(datos.usuario_id()) == false) {
+			throw new ValidacionDeIntegridad("No fue encontrado un usuario para el id: " + datos.usuario_id());
+		}
+		
+		if(cursoRepository.existsById(datos.curso_id()) == false) {
+			throw new ValidacionDeIntegridad("No fue encontrado un curso para el id: " + datos.curso_id());
+		}
+		
+		var usuario = usuarioRepository.findById(datos.usuario_id()).get();
+		var curso = cursoRepository.findById(datos.curso_id()).get();
+		
+		var topicoRepetido = topicoRepository.existsByTituloAndMensaje(datos.titulo(), datos.mensaje());
+		if(topicoRepetido) {
+			throw new ValidacionDeIntegridad("Topico repetido, porfavor cambie el titulo o el mensaje");
+		}
+		
+		Topico topico = topicoRepository.save(new Topico(datos, usuario, curso));
+		
+		URI url = uriComponentsBuilder.path("/topicos/{id}").buildAndExpand(topico.getId()).toUri();
+		return ResponseEntity.created(url).body(new DatosDetalleTopico(topico));
+	}
+
+	public ResponseEntity<Page<DatosDetalleTopico>> listadoTopicos(Pageable paginacion) {
+		return ResponseEntity.ok(topicoRepository.findByActivoTrue(paginacion).map(DatosDetalleTopico::new));
+	}
+
+	public DatosDetalleTopico retornarDatosTopico(Long id) {
+		/*if(!topicoRepository.existsById(id)) {
+			throw new ValidacionDeIntegridad("No fue encontrado un topico con el id: " + id);
+		}*/
+		Topico topico = topicoRepository.getReferenceById(id);
+		if(!topico.getActivo()) {
+			throw new ValidacionDeIntegridad("No fue encontrado un topico activo con el id: " + id);
+		}
+		return new DatosDetalleTopico(topico);
+	}
+
+	public Object actualizarTopico(Long id, DatosActualizarTopico datosActualizarTopico) {
+		if(topicoRepository.existsById(id) == false) {
+			throw new ValidacionDeIntegridad("No fue encontrado un topico con el id: " + id);
+		}
+		Topico topico = topicoRepository.getReferenceById(id);
+			topico.actualizarDatos(datosActualizarTopico);
+			return new DatosDetalleTopico(topico);
+	}
+
+	public void eliminarTopico(Long id) {
+		if(!topicoRepository.existsById(id)) {
+			throw new ValidacionDeIntegridad("No fue encontrado un topico con el id: " + id);
+		}
+		Topico topico = topicoRepository.getReferenceById(id);
+		topico.desactivarTopico();
+	}
+
+	
+}

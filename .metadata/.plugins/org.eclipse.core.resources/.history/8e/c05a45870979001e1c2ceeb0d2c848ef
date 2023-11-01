@@ -1,0 +1,93 @@
+package com.alura.foro.domain.topico;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.test.context.ActiveProfiles;
+
+import com.alura.foro.domain.curso.Curso;
+import com.alura.foro.domain.curso.DatosRegistrarCurso;
+import com.alura.foro.domain.usuario.DatosRegistroUsuario;
+import com.alura.foro.domain.usuario.Usuario;
+
+@DataJpaTest
+@AutoConfigureTestDatabase(replace=AutoConfigureTestDatabase.Replace.NONE)
+@ActiveProfiles("test")
+class TopicoRepositoryTest {
+
+	@Autowired
+	private TopicoRepository repository;
+	
+	@Autowired
+	private TestEntityManager em;
+	
+	@Test
+	@DisplayName("deberia retornar verdadero si ya existe un topico activo con el mismo titulo y mensaje.")
+	void existsTopicoByTituloAndMensajeAndActivoTrueEscenario1() {
+		
+		var usuario = registrarUsuario("login1", "email1", "clave1");
+		
+		var curso = registrarCurso("nombre1", "categoria1");
+		
+		var topico = registrarTopico("titulo1", "mensaje1", usuario, curso);
+		
+		var topicoExistente = repository.existsByTituloAndMensajeAndActivoTrue(topico.getTitulo(), topico.getMensaje());
+		
+		assertEquals(true, topicoExistente);
+	}
+	
+	@Test
+	@DisplayName("deberia retornar falso si no existe un topico activo con el mismo titulo y mensaje.")
+	void existsTopicoByTituloAndMensajeAndActivoTrueEscenario2() {
+		
+		var usuario = registrarUsuario("login1", "email1", "clave1");
+		
+		var curso = registrarCurso("nombre1", "categoria1");
+		
+		var topico = registrarTopico("titulo1", "mensaje1", usuario, curso);
+		topico.setActivo(false);
+		
+		var topicoExistente = repository.existsByTituloAndMensajeAndActivoTrue(topico.getTitulo(), topico.getMensaje());
+		
+		assertEquals(false, topicoExistente);
+	}
+	
+	
+	private Topico registrarTopico(String titulo, String mensaje, Usuario usuario, Curso curso) {
+		Topico topico = new Topico(datosTopico(titulo, mensaje, usuario, curso), usuario, curso);
+		em.persist(topico);
+		return topico;
+	}
+	
+	private DatosRegistrarTopico datosTopico(String titulo, String mensaje, Usuario usuario, Curso curso) {
+		return new DatosRegistrarTopico(titulo, mensaje, usuario.getId(), curso.getId());
+	}
+	
+	private Usuario registrarUsuario(String login, String email, String clave) {
+		var usuario = new Usuario(datosUsuario(login, email, clave));
+		em.persist(usuario);
+		return usuario;
+	}
+	
+	private DatosRegistroUsuario datosUsuario(String login, String email, String clave) {
+		return new DatosRegistroUsuario(login, email, clave);
+	}
+	
+	private Curso registrarCurso(String nombre, String categoria) {
+		var curso = new Curso(datosCurso(nombre, categoria));
+		em.persist(curso);
+		return curso;
+	}
+	
+	private DatosRegistrarCurso datosCurso(String nombre, String categoria) {
+		return new DatosRegistrarCurso(nombre, categoria);
+	}
+	
+
+
+}

@@ -1,0 +1,145 @@
+package com.alura.foro.controller;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.json.AutoConfigureJsonTesters;
+import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.json.JacksonTester;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.web.util.UriComponentsBuilder;
+
+import com.alura.foro.domain.curso.Curso;
+import com.alura.foro.domain.curso.DatosDetalleCurso;
+import com.alura.foro.domain.curso.DatosRegistrarCurso;
+import com.alura.foro.domain.topico.DatosDetalleTopico;
+import com.alura.foro.domain.topico.DatosRegistrarTopico;
+import com.alura.foro.domain.topico.RegistroDeTopicoService;
+import com.alura.foro.domain.topico.StatusTopico;
+import com.alura.foro.domain.topico.Topico;
+import com.alura.foro.domain.usuario.DatosDetalleUsuario;
+import com.alura.foro.domain.usuario.DatosRegistroUsuario;
+import com.alura.foro.domain.usuario.Usuario;
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+
+import java.time.LocalDateTime;
+
+@SpringBootTest
+@AutoConfigureMockMvc
+@AutoConfigureJsonTesters
+class TopicoControllerTest {
+
+	@Autowired
+	private MockMvc mvc;
+	
+	@Autowired
+	private JacksonTester<DatosRegistrarTopico> registrarTopicoJacksonTester;
+
+	@Autowired
+	private JacksonTester<DatosDetalleTopico> detalleTopicoJacksonTester;
+	
+	@Autowired
+	private RegistroDeTopicoService service;
+	
+	
+	@Test
+	@DisplayName("Deberia retornar estado http 400 cuando los datos ingresados sean invalidos")
+	@WithMockUser
+	void registrarTopicoEscenario1() throws Exception {
+		
+		var response = mvc.perform(post("/topicos")).andReturn().getResponse();
+				
+		assertEquals(response.getStatus(), HttpStatus.BAD_REQUEST.value());
+	}
+	
+	@Test
+	@DisplayName("Deberia retornar estado http 200 cuando los datos ingresados sean validos")
+	@WithMockUser
+	void registrarTopicoEscenario2() throws Exception {
+		
+		/*var fecha = LocalDateTime.now();
+		var estatus = StatusTopico.NO_RESPONDIDO;
+		var datosUsuario = datosUsuario("login1", "email1", "clave1");
+		var datosCurso = datosCurso("nombre1", "categoria1");*/
+		
+		
+		var usuario = registrarUsuario("login1", "email1", "clave1");
+		
+		var curso = registrarCurso("nombre1", "categoria1");
+		
+		var topico = registrarTopico("titulo1", "mensaje1", usuario, curso);
+		var datosTopico = new DatosDetalleTopico(topico);
+
+		
+		//var respuesta = ResponseEntity.ok().body(datosTopico);
+		
+		System.out.println("pasa por aca1");
+		
+		//when(service.registrarTopico(any(), any())).thenReturn(respuesta);
+		//when(service.registrarTopico(any(DatosRegistrarTopico.class), any())).thenReturn(respuesta);
+		
+		//UriComponentsBuilder uriComponentsBuilder = mock(UriComponentsBuilder.class);
+		//when(service.registrarTopico(any(DatosRegistrarTopico.class))).thenReturn(topico);
+
+		System.out.println("pasa por aca2");
+		
+		var response = mvc.perform(post("/topicos")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(registrarTopicoJacksonTester.write(new DatosRegistrarTopico("titulo1", "mensaje1", 1l, 1l)).getJson())
+				).andReturn().getResponse();
+		//System.out.println("si se esta generando algo " + response);
+		assertEquals(response.getStatus(), HttpStatus.OK.value());
+	
+		var jsonEsperado = detalleTopicoJacksonTester.write(datosTopico).getJson();
+		
+		assertEquals(response.getContentAsString(), jsonEsperado);
+	}
+	
+	/*private DatosDetalleCurso datosCurso(String nombre, String categoria) {
+		return new DatosDetalleCurso(nombre, categoria);
+	}
+	
+	private DatosDetalleUsuario datosUsuario(String login, String email, String clave) {
+		return new DatosDetalleUsuario(login, email, clave);
+	}*/
+	
+	private Topico registrarTopico(String titulo, String mensaje, Usuario usuario, Curso curso) {
+		Topico topico = new Topico(datosTopico(titulo, mensaje, usuario, curso), usuario, curso);
+		return topico;
+	}
+	
+	private DatosRegistrarTopico datosTopico(String titulo, String mensaje, Usuario usuario, Curso curso) {
+		return new DatosRegistrarTopico(titulo, mensaje, usuario.getId(), curso.getId());
+	}
+	
+	private Usuario registrarUsuario(String login, String email, String clave) {
+		var usuario = new Usuario(datosUsuario(login, email, clave));
+		return usuario;
+	}
+	
+	private DatosRegistroUsuario datosUsuario(String login, String email, String clave) {
+		return new DatosRegistroUsuario(login, email, clave);
+	}
+	
+	private Curso registrarCurso(String nombre, String categoria) {
+		var curso = new Curso(datosCurso(nombre, categoria));
+		return curso;
+	}
+	
+	private DatosRegistrarCurso datosCurso(String nombre, String categoria) {
+		return new DatosRegistrarCurso(nombre, categoria);
+	}
+
+}

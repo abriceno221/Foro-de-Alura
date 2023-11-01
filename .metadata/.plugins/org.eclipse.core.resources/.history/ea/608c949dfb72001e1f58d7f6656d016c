@@ -1,0 +1,15 @@
+package com.alura.foro.domain.topico;
+
+import jakarta.validation.constraints.NotBlank;
+
+public record DatosRegistrarTopico(
+		@NotBlank
+		String titulo,
+		@NotBlank
+		String mensaje,
+		@NotBlank
+		Long usuario_id,
+		@NotBlank
+		Long curso_id
+		) {
+}

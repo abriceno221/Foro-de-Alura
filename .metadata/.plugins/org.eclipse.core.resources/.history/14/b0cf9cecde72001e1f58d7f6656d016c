@@ -1,0 +1,3 @@
+ALTER TABLE topicos 
+ADD COLUMN curso_id INT, 
+ADD FOREIGN KEY (curso_id) REFERENCES cursos(id);
