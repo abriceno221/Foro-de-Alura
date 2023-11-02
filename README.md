@@ -38,33 +38,36 @@ datos que permitan establecer la relación entre tópicos y respuestas, relacion
 <h2 id="caracteristicas-de-la-aplicacion-y-demostracion">⚙️Características de la aplicación y demostración</h2>
 <ul>
     <li><code>Registro de un nuevo tópico</code>: la API contiene un endpoint para el registro de nuevos tópicos y acepta solicitudes POST para el URI "/topicos".
-      Los datos del tópico( titulo, mensaje, autor y curso) deben enviarse en el cuerpo de la solicitud, en formato JSON.
+      Los datos del tópico (titulo, mensaje, autor y curso) deben enviarse en el cuerpo de la solicitud, en formato JSON.
       <p></p>
-      <img alt="login" src="https://github.com/abriceno221/Hotel-Alura/assets/132310492/ce93a136-54ae-4133-9e96-bc7a5d93234b">
+      <img alt="post" src="https://github.com/abriceno221/Foro-de-Alura/assets/132310492/813deec4-9099-4402-974a-1baa13efcb53">
+        <img alt="post-respuesta" src="https://github.com/abriceno221/Foro-de-Alura/assets/132310492/b2f935bd-19b8-4feb-bb08-918f7b715050">
     </li>
     <li><code>Mostrar todos los tópicos creados</code>: la API contiene un endpoint para el listado de todos los tópicos y acepta solicitudes GET para la URI "/topicos".
       Los datos de cada tópico (titulo, mensaje, fecha de creación, estatus, autor y curso) son devueltos en el cuerpo de la respuesta, en formato JSON.
       <p></p>
-      <img alt="login" src="https://github.com/abriceno221/Hotel-Alura/assets/132310492/ce93a136-54ae-4133-9e96-bc7a5d93234b">
+      <img alt="get" src="https://github.com/abriceno221/Foro-de-Alura/assets/132310492/81b275d8-c938-4bcc-bd37-ca45e02b41c9">
+        <img alt="get-respuesta" src="https://github.com/abriceno221/Foro-de-Alura/assets/132310492/73c8b142-2223-4ef0-9b9e-068118a789f6">
     </li>
     <li><code>Detallando un tópico</code>: la API contiene un endpoint para el listado de un tópico en específico y acepta solicitudes GET para la URI "/topicos/{id}".
       Los datos del tópico (titulo, mensaje, fecha de creación, estatus, autor y curso) son devueltos en el cuerpo de la respuesta, en formato JSON.
       <p></p>
-      <img alt="login" src="https://github.com/abriceno221/Hotel-Alura/assets/132310492/ce93a136-54ae-4133-9e96-bc7a5d93234b">
+      <img alt="get-especifico" src="https://github.com/abriceno221/Foro-de-Alura/assets/132310492/a4952c24-babc-4f43-876e-2940ecc0d870">
+      <img alt="get-especifico-respuesta" src="https://github.com/abriceno221/Foro-de-Alura/assets/132310492/763275c9-44f8-43ef-b616-e7864435f77f"> 
     </li>
     <li><code>Actualizar un tópico</code>: la API contiene un endpoint para la actualización de un tópico y acepta solicitudes PUT para la URI "/topicos/{id}".
       <p></p>
-      <img alt="login" src="https://github.com/abriceno221/Hotel-Alura/assets/132310492/ce93a136-54ae-4133-9e96-bc7a5d93234b">
+      <img alt="put" src="https://github.com/abriceno221/Foro-de-Alura/assets/132310492/2af94cdd-0a61-4cbc-be6d-17638b9667c6">
+      <img alt="put-respuesta" src="https://github.com/abriceno221/Foro-de-Alura/assets/132310492/4930e2d9-d573-40cd-8f04-08a9583f09cb">
     </li>
     <li><code>Eliminar un tópico</code>: la API contiene un endpoint para la eliminación de un tópico y acepta solicitudes DELETE para la URI "/topicos/{id}". En realidad de trata de un delete lógico, no se
       elimina totalmente el tópico de la base de datos, si no que se desactiva para no mostrarlo cuando se listen los tópicos y para que no interfiera en la creación de nuevos, pero se deja igualmente el registro 
       con toda la información pertinente en la base de datos.
       <p></p>
-      <img alt="login" src="https://github.com/abriceno221/Hotel-Alura/assets/132310492/ce93a136-54ae-4133-9e96-bc7a5d93234b">
+      <img alt="put" src="https://github.com/abriceno221/Foro-de-Alura/assets/132310492/7a19a59b-4b3b-42a1-90c6-b5bcfb1d79de">
+      <img alt="put-respuesta" src="https://github.com/abriceno221/Foro-de-Alura/assets/132310492/ecb77331-e753-4bf8-88ad-333b31f39128">
     </li>
     <li><code>Validaciones</code>: cada request detallado anteriormente, sigue diferentes validaciones para su correcta ejecución
-      <p></p>
-      <img alt="login" src="https://github.com/abriceno221/Hotel-Alura/assets/132310492/ce93a136-54ae-4133-9e96-bc7a5d93234b">
       <p></p>
       <ul>
         <li><code>POST</code>: para el caso de los registros, se debe validar que todos los campos sean llenados previamente y que no se creen tópicos repetidos (con mismo título y mensaje).</li>
@@ -73,20 +76,34 @@ datos que permitan establecer la relación entre tópicos y respuestas, relacion
         <li><code>DELETE</code>: al igual que en el caso de actualizar, para eliminar un tópico se valida que el id enviado sea correcto y que el tópico no haya sido desactivado anteriormente</li>
       </ul>
     </li>
-    <li><code>Pruebas a la API</code>: el código contiene test automatizados para el controller de Topico y los estados http 201 (cuando los datos ingresados son correctos y permiten registrar un nuevo tópico) y 
-      400 (cuando los datos ingresados son invalidos).
+    <li><code>Pruebas a la API</code>: el código contiene test automatizados para el controller de Topico y los estados http 201 (cuando los datos ingresados son correctos y permiten registrar un nuevo tópico) y 400 (cuando los datos ingresados son invalidos). De igual forma, contiene test automatizados para el Respository de Topico para verificar que la consulta a la base retorna los datos esperados.
+    </li>
+<li><code>Documentación de la API</code>: la documentación de la API se realizó usando la api externa OpenApi, por lo que ingresando a los siguientes links, es posible probar las diferentes funciones de la API 
+        y obtener más información de esta.
       <p></p>
-      De igual forma, contiene test automatizados para el Respository de Topico para verificar que la consulta a la base retorna los datos esperados.
-      <img alt="login" src="https://github.com/abriceno221/Hotel-Alura/assets/132310492/ce93a136-54ae-4133-9e96-bc7a5d93234b">
+        - http://localhost:8080/v3/api-docs
+        <p></p>
+        <img alt="login" src="https://github.com/abriceno221/Foro-de-Alura/assets/132310492/934ceafd-758d-44a4-bc13-3ab98b83583a">
+        - http://localhost:8080/swagger-ui/index.html
+        <p></p>
+      <img alt="login" src="https://github.com/abriceno221/Foro-de-Alura/assets/132310492/9b29bb2e-15fe-476b-91db-fdde4691634f">
+    </li>
+    <li><code>Autenticación y Autorización</code>: la autenticación de la API es de tipo stateless
     </li>
 </ul>
 
 <h2 id="tecnologias-utilizadas">🖥️Tecnologías utilizadas</h2>
 <ul>
-    <li>Java 11</li>
+    <li>Java 17</li>
     <li>MySQL</li>
-    <li>JDBC</li>
-    <li>C3P0</li>
+    <li>JPA-Hibernate</li>
+    <li>Lombok</li>
+    <li>Bean Validation</li>
+    <li>Spring Security</li>
+    <li>Bcrypt</li>
+    <li>OpenAPI 2.2.0</li>
+    <li>auth0 4.2.0</li>
+    <li>Flyway</li>
 </ul>
   
 <h2 id="personas-desarrolladores-del-proyecto">🧑‍💻Personas-Desarrolladores del Proyecto</h2>
