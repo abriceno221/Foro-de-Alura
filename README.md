@@ -81,10 +81,10 @@ datos que permitan establecer la relación entre tópicos y respuestas, relacion
 <li><code>Documentación de la API</code>: la documentación de la API se realizó usando la api externa OpenApi, por lo que ingresando a los siguientes links, es posible probar las diferentes funciones de la API 
         y obtener más información de esta.
       <p></p>
-        - http://localhost:8080/v3/api-docs
+        - <a href="http://localhost:8080/v3/api-docs">Informacion en formato Json de la API</a>
         <p></p>
         <img alt="login" src="https://github.com/abriceno221/Foro-de-Alura/assets/132310492/934ceafd-758d-44a4-bc13-3ab98b83583a">
-        - http://localhost:8080/swagger-ui/index.html
+        - <a href="http://localhost:8080/swagger-ui/index.html">Página Swagger UI</a>
         <p></p>
       <img alt="login" src="https://github.com/abriceno221/Foro-de-Alura/assets/132310492/9b29bb2e-15fe-476b-91db-fdde4691634f">
     </li>
